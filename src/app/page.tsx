@@ -140,18 +140,22 @@ export default function Home(){
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-24 py-4">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        { isLogged ? 
-            <button onClick={logout}>
-                <button type='button' className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded'>LOGOUT</button>
-            </button> : 
-            <a href={url}>
-                <button type='button' className='bg-neutral-700 hover:bg-stone-900 text-green-500 font-bold py-2 px-4 rounded'>Sign in with Spotify</button>
+      <div className="flex items-start justify-between w-full mb-3">
+        <a className='font-serif text-4xl' href="/">Locatify</a>
+        <div className="z-10 max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+            { isLogged && 
+            <a className='flex justify-end' href="/post">
+                <button type='button' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>POST</button>
             </a> 
-        }
-        { isLogged && <a className='flex justify-end' href="/post">
-            <button type='button' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>POST</button>
-        </a> }
+            }
+            { isLogged ? 
+                <button type='button' onClick={logout} className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-3'>LOGOUT</button>
+                : 
+                <a href={url}>
+                    <button type='button' className='bg-neutral-700 hover:bg-stone-900 text-green-500 font-bold py-2 px-4 rounded ml-3'>Sign in with Spotify</button>
+                </a> 
+            }
+        </div>
       </div>
 
       <div className="flex sm:w-full md:w-5/6 lg:w-full h-screen">

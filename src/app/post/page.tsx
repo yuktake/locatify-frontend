@@ -119,9 +119,12 @@ export default function Post(){
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center px-24 py-4">
+            <div className="flex items-start justify-start w-full">
+                <a className='font-serif text-4xl' href="/">Locatify</a>
+            </div>
             <div className="flex sm:w-full md:w-5/6 lg:w-full h-screen">
                 <div className="flex flex-col items-start justify-start sm:w-full md:w-5/6 lg:w-1/2">
-                    <div className='flex items-center justify-between w-full'>
+                    <div className='flex items-center justify-end w-full'>
                         <button onClick={() => toCurrent()}>
                             <img src="/near.svg" alt="" width={24} />
                         </button>
