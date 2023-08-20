@@ -37,6 +37,11 @@ export default function Post(){
         lng: center_longitude,
     };
 
+    const current = {
+        lat: current_latitude,
+        lng: current_longitude,
+    };
+
     const clicked = {
         lat: clicked_latitude,
         lng: clicked_longitude,
@@ -71,6 +76,8 @@ export default function Post(){
     function clickMap(e:any){
         setClickedLatitude(e.latLng.lat())
         setClickedLongitude(e.latLng.lng())
+        setCenterLatitude(e.latLng.lat())
+        setCenterLongitude(e.latLng.lng())
     }
 
     function toCurrent() {
@@ -146,7 +153,7 @@ export default function Post(){
                             }}
                         />}
                         <Marker 
-                            position={center} 
+                            position={current} 
                             label=''
                             icon={{
                                 url: '/me.svg',
