@@ -25,3 +25,15 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.title-h {
+  height: 5vh;
+}
+
+.preview-h {
+  height: 80vh;
+}
+
+.audio-h {
+  height: 5vh;
+}
