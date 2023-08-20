@@ -59,5 +59,20 @@ export interface SpotifyUserResponse {
     country: string,
     display_name: string,
     id: string,
+    email: string,
 }
   
+export type Location = {
+    id: number,
+    uid: string,
+    mid: string,
+    track_name: string,
+    artist_name: string,
+    point: string,
+    x: number,
+    y: number,
+    thumbnail: string,
+    preview_url: string,
+    created_at: string,
+    updated_at: string
+}
