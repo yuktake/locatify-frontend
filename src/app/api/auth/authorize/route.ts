@@ -33,9 +33,17 @@ export async function GET(req:any,res:any) {
     }
   );
 
+  const user = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/${userResponse.data.id}`)
+  if(user.data.status == 404) {
+    const userParams = {
+      uid: userResponse.data.id,
+      email: userResponse.data.email,
+    }
+    await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users`, userParams)
+  }
+
   const hour = 60*60*1000
   const expiredUnixTime = Date.now() + hour
-  console.log(expiredUnixTime)
 
   cookie.set({
     name: 'access_token',
@@ -57,7 +65,6 @@ export async function GET(req:any,res:any) {
 
   cookie.set({
     name: 'user_id',
-    expires: expiredUnixTime,
     value: userResponse.data.id.toString(),
     httpOnly: true,
     sameSite: 'lax',

@@ -66,7 +66,6 @@ export async function GET(req:any, res:any) {
 
         return NextResponse.json({ 
             status: 200,
-            accessToken: accessToken 
         });
     }catch(e:any){
         return NextResponse.json({ 

@@ -11,7 +11,11 @@ export async function GET(req: NextRequest) {
     try {
         const {searchParams} = new URL(req.url);
         const cookie = cookies()
-        const q:string = searchParams.get('q')!;
+        const q:string = searchParams.get('q') ?? '';
+
+        if(q == '') {
+            return NextResponse.json({ tracks: [] }, { status: 200 });
+        }
 
         const accessToken = cookie.get('access_token')?.value;
 
