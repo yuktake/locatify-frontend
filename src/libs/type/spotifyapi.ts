@@ -76,3 +76,15 @@ export type Location = {
     created_at: string,
     updated_at: string
 }
+
+export type TrackMarker = {
+    id: number,
+    track_name:string,
+    artist_name:string,
+    point: {
+        lat: number,
+        lng:number,
+    },
+    url: string,
+    preview_url: string,
+}

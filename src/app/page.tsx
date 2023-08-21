@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { useSearchParams } from 'next/navigation';
+import { Location, TrackMarker } from '@/libs/type/spotifyapi';
 
 const containerStyle = {
   width: "100%",
@@ -13,8 +14,8 @@ const containerStyle = {
 const zoom = 13;
 
 export default function Home(){
-  const [markers, setMarkers] = useState<any>([]);
-  const [selected_marker, setSelectedMarker] = useState<any|null>(null);
+  const [markers, setMarkers] = useState<TrackMarker[]>([]);
+  const [selected_marker, setSelectedMarker] = useState<TrackMarker|null>(null);
 
   const [current_latitude, setCurrentLatitude] = useState<number>(0);
   const [current_longitude, setCurrentLongitude] = useState<number>(0);
@@ -23,7 +24,7 @@ export default function Home(){
   const [center_longitude, setCenterLongitude] = useState<number>(0);
 
   const [radius, setRadius] = useState<string>('1');
-  const [map, setMap] = useState<any>(null);
+  const [map, setMap] = useState<google.maps.Map|null>(null);
 
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
@@ -82,7 +83,7 @@ export default function Home(){
 
   };
 
-  function selectMarker(marker:any) {
+  function selectMarker(marker:TrackMarker) {
     setCenterLatitude(marker.point.lat)
     setCenterLongitude(marker.point.lng)
     setSelectedMarker(marker)
@@ -106,16 +107,20 @@ export default function Home(){
     params.append('lng', lng.toString())
     params.append('radius', radius.toString())
 
-    const tmpMarkers:Array<any> = []
+    const tmpMarkers:Array<TrackMarker> = []
     axios.get(`/api/location/search?${params.toString()}`).then((response) => {
-      response.data.locations.forEach((location:any) => {
-        const tmpMarker: { [name: string]: any } = {};
-        tmpMarker['id'] = location.id
-        tmpMarker['track_name'] = location.track_name
-        tmpMarker['artist_name'] = location.artist_name
-        tmpMarker['point'] = {lat: location.x, lng: location.y}
-        tmpMarker['url'] = location.thumbnail
-        tmpMarker['preview_url'] = location.preview_url
+      response.data.locations.forEach((location: Location) => {
+        const tmpMarker: TrackMarker = {
+            id: location.id,
+            track_name: location.track_name,
+            artist_name: location.artist_name,
+            point: {
+                lat: location.x,
+                lng: location.y,
+            },
+            url: location.thumbnail,
+            preview_url: location.preview_url,
+        }
         tmpMarkers.push(tmpMarker)
       })
 
@@ -200,7 +205,7 @@ export default function Home(){
                 }}
             />}
 
-            {markers.map((marker:any) => (
+            {markers.map((marker:TrackMarker) => (
               <Marker 
                 onClick={() => selectMarker(marker)}
                 key={marker.id}
