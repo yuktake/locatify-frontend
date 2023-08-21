@@ -59,7 +59,7 @@ export default function Preview({
     }
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center px-24 py-4">
+        <main className="flex min-h-screen flex-col items-center justify-center px-12 py-4">
             <head>
                 <script async src="https://platform.twitter.com/widgets.js"></script>
                 <meta property="twitter:card" content="summary_large_image" />
@@ -72,24 +72,20 @@ export default function Preview({
                 <meta property="twitter:image" content={location?.thumbnail} />
             </head>
 
-            <div className="flex flex-col items-start justify-center h-screen mb-3">
-                <div className="flex items-start justify-start h-screen">
+            <div className="flex flex-col items-center justify-center h-screen">
+                <div className="flex items-center justify-between w-full">
                     <a className='font-serif text-4xl' href="/">Locatify</a>
+                    <a className="twitter-share-button" href="https://twitter.com/intent/tweet"></a>
                 </div>
                 {location != null && 
                     <div>
-                        <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm flex">
-                            <a className="twitter-share-button" href="https://twitter.com/intent/tweet"></a>
-                            <a href=''><img src="/post.svg" alt="" /></a> 
-                        </div>
-                        
                         <div className='flex items-center justify-between title-h'>
                             <p>{location.track_name}</p>
                             <p>{location.artist_name}</p>
                         </div>
                         <div className="flex flex-col items-center justify-center">
                             <img className='w-full' src={location.thumbnail} alt="" />
-                            <audio className='mt-3 audio-h w-full' controls src={location.preview_url} muted></audio>
+                            <audio className='my-3 audio-h w-full' controls src={location.preview_url}></audio>
                         </div>
                     </div>
                 }

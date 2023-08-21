@@ -144,10 +144,10 @@ export default function Home(){
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-24 py-4">
+    <main className="flex min-h-screen flex-col items-center justify-center px-12 py-4">
       <div className="flex items-start justify-between w-full mb-3">
         <a className='font-serif text-4xl' href="/">Locatify</a>
-        <div className="z-10 max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+        <div className="z-10 max-w-5xl items-center justify-between font-mono text-sm flex">
             { isLogged && 
             <a className='flex justify-end' href="/post">
                 <button type='button' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>POST</button>
@@ -163,14 +163,14 @@ export default function Home(){
         </div>
       </div>
 
-      <div className="flex sm:w-full md:w-5/6 lg:w-full h-screen">
-        <div className="flex flex-col items-start justify-start sm:w-full md:w-5/6 lg:w-1/2">
+      <div className="lg:flex w-full h-screen">
+        <div className="flex flex-col items-center justify-center lg:w-1/2 h-half-screen">
           <div className='flex items-center justify-between w-full'>
             <div className='flex items-center my-3'>
               <button onClick={() => {searchLocation(current_latitude,current_longitude)}}>
                 <img src="/search.svg" alt="" width={24} />
               </button>
-              <span>半径</span>
+              <span className='ml-3'>Area</span>
               <select
                 className='text-black ml-3'
                 onChange={(e) => {
@@ -220,15 +220,15 @@ export default function Home(){
           </GoogleMap>
         </div>
 
-        <div className="flex flex-col items-start justify-center sm:w-full md:w-5/6 lg:w-1/2 m-3">
+        <div className="flex flex-col items-center justify-center w-full lg:w-1/2 m-3">
             {selected_marker != null && 
-                <div className='w-full'>
-                    <div className='flex items-center justify-between'>
+                <div className='flex flex-col items-center justify-center'>
+                    <div className='w-4/5 flex items-center justify-between'>
                         <p>{selected_marker.track_name}</p>
                         <p>{selected_marker.artist_name}</p>
                     </div>
-                    <img src={selected_marker.url} />
-                    {selected_marker.preview_url != null && <audio className='w-full mt-3' controls src={selected_marker.preview_url} muted></audio>}
+                    <img className='w-4/5' src={selected_marker.url} />
+                    {selected_marker.preview_url != null && <audio className='w-full mt-3' controls src={selected_marker.preview_url}></audio>}
                 </div>
             }
         </div>

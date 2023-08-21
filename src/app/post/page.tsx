@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import ModalComponent from '@/components/modal';
 
 const containerStyle = {
     width: "100%",
@@ -12,10 +13,6 @@ const containerStyle = {
 const zoom = 13;
 
 export default function Post(){
-
-    const [query, setQuery] = useState<string>('');
-    const [tracks, setTracks] = useState([]);
-    const [selected_track, setSelectedTrack] = useState<string>('');
 
     const [current_latitude, setCurrentLatitude] = useState<number>(0);
     const [current_longitude, setCurrentLongitude] = useState<number>(0);
@@ -31,6 +28,12 @@ export default function Post(){
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
     })
+
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    const close = () => {
+        setIsOpen(false)
+    }
 
     const center = {
         lat: center_latitude,
@@ -74,10 +77,18 @@ export default function Post(){
     };
 
     function clickMap(e:any){
+        console.log('start')
         setClickedLatitude(e.latLng.lat())
         setClickedLongitude(e.latLng.lng())
         setCenterLatitude(e.latLng.lat())
         setCenterLongitude(e.latLng.lng())
+        setIsOpen(true)
+
+        console.log('mid')
+        if(isOpen) {
+            return;
+        }
+        console.log('end')
     }
 
     function toCurrent() {
@@ -92,42 +103,6 @@ export default function Post(){
         alert("位置情報が取得できませんでした");
     };
 
-    const searchTracksByKeyword = (q: string) => {
-        setQuery(q);
-        axios.get('/api/track/search?q='+q).then((response) => {
-            setTracks(response.data.tracks)
-        });
-    }
-
-    function disabled():boolean {
-        return clicked_latitude == 0 || clicked_longitude == 0 || selected_track == ''
-    }
-
-    const postLocation = () => {
-        if (selected_track == '') {
-            alert('投稿する曲を設定してください')
-            return
-        }
-
-        if (clicked_latitude == 0 || clicked_longitude == 0) {
-            alert('投稿する場所をマップにセットしてください')
-            return
-        }
-        
-        const params = {
-            lat: clicked_latitude.toString(),
-            lng: clicked_longitude.toString(),
-            mid: selected_track,
-        };
-        axios.post('/api/location/post', params).then((response) => {
-            setSelectedTrack('')
-            setClickedLatitude(0)
-            setClickedLongitude(0)
-        })
-        alert('success')
-        window.location.href = '/'
-    }
-
     if(!isLoaded) {
         return (
             <></>
@@ -135,74 +110,49 @@ export default function Post(){
     }
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center px-24 py-4">
-            <div className="flex items-start justify-start w-full">
-                <a className='font-serif text-4xl' href="/">Locatify</a>
-            </div>
-            <div className="flex sm:w-full md:w-5/6 lg:w-full h-screen">
-                <div className="flex flex-col items-start justify-start sm:w-full md:w-5/6 lg:w-1/2">
-                    <div className='flex items-center justify-end w-full'>
-                        <button onClick={() => toCurrent()}>
-                            <img src="/near.svg" alt="" width={24} />
-                        </button>
-                    </div>
-
-                    <GoogleMap 
-                        mapContainerStyle={containerStyle} 
-                        center={center} 
-                        zoom={zoom} 
-                        onLoad={map=>setMap(map)}
-                        onClick={clickMap}
-                    >
-                        {clicked.lat != 0 && <Marker 
-                            position={clicked} 
-                            label='' 
-                            icon={{
-                                url: '/music.svg',
-                                scaledSize: new google.maps.Size(40,40)
-                            }}
-                        />}
-                        <Marker 
-                            position={current} 
-                            label=''
-                            icon={{
-                                url: '/me.svg',
-                                scaledSize: new google.maps.Size(40,40)
-                            }}
-                        />
-                    </GoogleMap>
+        <main className="min-h-screen px-12 py-4">
+            <div className='flex flex-col items-center justify-center'>
+                <div className="flex items-start justify-start w-full">
+                    <a className='font-serif text-4xl' href="/">Locatify</a>
                 </div>
+                <div className="flex w-full h-screen">
+                    <div className="flex flex-col items-start justify-start w-full">
+                        <div className='flex items-center justify-end w-full'>
+                            <button onClick={() => toCurrent()}>
+                                <img src="/near.svg" alt="" width={24} />
+                            </button>
+                        </div>
 
-                <div className="flex flex-col items-start justify-start sm:w-full md:w-5/6 lg:w-1/2 m-3">
-                    <div className='flex items-center justify-between w-full'>
-                        <input
-                            className='text-black'
-                            placeholder="Search Tracks"
-                            onChange={(e) => { searchTracksByKeyword(e.target.value.replace(/　/g, ' ')) }}
-                        />
-
-                        <button onClick={() => {postLocation()}} className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>POST</button>
-                    </div>
-
-                    <div className='overflow-auto'>
-                        {tracks.map((track:any) => (
-                            <div key={track.id} className={selected_track == track.id ? "my-5 bg-amber-300" : "my-5"}>
-                                <p>{track.name}</p>
-                                <img
-                                className="my-2"
-                                src={track.album.images[0].url}
-                                width={180}
-                                height={37}
-                                alt='album_img'
-                                onClick={() => setSelectedTrack(track.id)}
-                                />
-                                {track.preview_url != null && <audio controls src={track.preview_url} muted></audio>}
-                                <span>--------</span>
-                            </div>
-                        ))}
+                        <GoogleMap 
+                            mapContainerStyle={containerStyle} 
+                            center={center} 
+                            zoom={zoom} 
+                            onLoad={map=>setMap(map)}
+                            onClick={clickMap}
+                        >
+                            {clicked.lat != 0 && <Marker 
+                                position={clicked} 
+                                label='' 
+                                icon={{
+                                    url: '/music.svg',
+                                    scaledSize: new google.maps.Size(40,40)
+                                }}
+                            />}
+                            <Marker 
+                                position={current} 
+                                label=''
+                                icon={{
+                                    url: '/me.svg',
+                                    scaledSize: new google.maps.Size(40,40)
+                                }}
+                            />
+                        </GoogleMap>
                     </div>
                 </div>
             </div>
+            
+            <ModalComponent show={isOpen} clicked_latitude={clicked_latitude} clicked_longitude={clicked_longitude} close={close} ></ModalComponent>
+
         </main>
     )
 }
