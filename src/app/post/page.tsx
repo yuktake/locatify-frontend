@@ -99,11 +99,21 @@ export default function Post(){
         });
     }
 
+    function disabled():boolean {
+        return clicked_latitude == 0 || clicked_longitude == 0 || selected_track == ''
+    }
+
     const postLocation = () => {
-        if (clicked_latitude == 0 || clicked_longitude == 0 || selected_track == '') {
-            alert('曲と位置を設定してください')
+        if (selected_track == '') {
+            alert('投稿する曲を設定してください')
             return
         }
+
+        if (clicked_latitude == 0 || clicked_longitude == 0) {
+            alert('投稿する場所をマップにセットしてください')
+            return
+        }
+        
         const params = {
             lat: clicked_latitude.toString(),
             lng: clicked_longitude.toString(),
