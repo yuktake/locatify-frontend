@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
     params.artist_name = res.data.artists[0].name,
     params.thumbnail = res.data.album.images[0].url
     params.preview_url = res.data.preview_url
+    
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/locations`, params)
 
     return NextResponse.json({ status: response.status });

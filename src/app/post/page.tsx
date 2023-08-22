@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import ModalComponent from '@/components/modal';
@@ -77,18 +77,15 @@ export default function Post(){
     };
 
     function clickMap(e:any){
-        console.log('start')
         setClickedLatitude(e.latLng.lat())
         setClickedLongitude(e.latLng.lng())
         setCenterLatitude(e.latLng.lat())
         setCenterLongitude(e.latLng.lng())
         setIsOpen(true)
 
-        console.log('mid')
         if(isOpen) {
             return;
         }
-        console.log('end')
     }
 
     function toCurrent() {

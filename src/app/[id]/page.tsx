@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { Location } from '@/libs/type/spotifyapi';
@@ -18,10 +18,6 @@ export default function Preview({
     params: { id: number };
 }) {
 
-    useEffect(() => {
-        
-    },[])
-
     const [location, setLocation] = useState<Location | null>(null);
     const [center_latitude, setCenterLatitude] = useState<number>(0);
     const [center_longitude, setCenterLongitude] = useState<number>(0);
@@ -34,8 +30,6 @@ export default function Preview({
         lat: center_latitude,
         lng: center_longitude,
     };
-
-
 
     async function getLocation(id:number) {
         const response = await axios.get(`/api/location/${id}`)
@@ -109,13 +103,4 @@ export default function Preview({
             </div>
         </main>
     )
-        
 }
-
-// export async function generateMetadata({ params }: {
-//     params: { id: number };
-// }): Promise<Metadata> {
-//     const response = await axios.get(`/api/location/${params.id}`)
-//     // templateを設定しているので、サイト名は自動で付く
-//     return response.data.mid;
-// }

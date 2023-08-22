@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 type ModalProps = {
@@ -38,7 +38,6 @@ const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: Mo
             mid: selected_track,
         };
         axios.post('/api/location/post', params)
-        alert('success')
         window.location.href = '/'
     }
 
@@ -74,10 +73,7 @@ const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: Mo
                         </div>
                     ))}
                 </div>
-                
-
                 <button onClick={() => {postLocation()}} className='post bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>POST</button>
-
             </div>
         </div>
       )}

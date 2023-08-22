@@ -42,9 +42,6 @@ export default function Home(){
     lng: current_longitude,
   };
 
-  const searchParams = useSearchParams()
-  const id = searchParams.get('id')
-
   useEffect(() => {
     if('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
@@ -80,7 +77,6 @@ export default function Home(){
     setCurrentLongitude(longitude)
     setCenterLatitude(latitude)
     setCenterLongitude(longitude)
-
   };
 
   function selectMarker(marker:TrackMarker) {
@@ -102,13 +98,14 @@ export default function Home(){
   };
 
   const searchLocation = (lat: number, lng: number) => {
-    const params = new URLSearchParams();
-    params.append('lat', lat.toString())
-    params.append('lng', lng.toString())
-    params.append('radius', radius.toString())
-
+    const params = {
+      lat: lat.toString(),
+      lng: lng.toString(),
+      radius: radius.toString(),
+    }
     const tmpMarkers:Array<TrackMarker> = []
-    axios.get(`/api/location/search?${params.toString()}`).then((response) => {
+    
+    axios.post(`/api/location/search`, params).then((response) => {
       response.data.locations.forEach((location: Location) => {
         const tmpMarker: TrackMarker = {
             id: location.id,
