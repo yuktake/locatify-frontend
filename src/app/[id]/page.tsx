@@ -73,9 +73,11 @@ export default function Preview({
                 </div>
                 {location != null && 
                     <div>
-                        <div className='flex items-center justify-between title-h'>
+                        <div className='text-xl flex items-center justify-start title-h'>
                             <p>{location.track_name}</p>
-                            <p>{location.artist_name}</p>
+                        </div>
+                        <div className='flex items-center justify-end title-h'>
+                            <p>By: {location.artist_name}</p>
                         </div>
                         <div className="flex flex-col items-center justify-center">
                             <img className='w-full' src={location.thumbnail} alt="" />

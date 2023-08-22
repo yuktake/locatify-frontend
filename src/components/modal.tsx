@@ -58,15 +58,20 @@ const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: Mo
 
                 <div className='flex flex-col items-center justify-center m-3'>
                     {tracks.map((track:any) => (
-                        <div key={track.id} className={selected_track == track.id ? "my-5 bg-amber-300 w-full flex flex-col items-center justify-center" : "my-5 w-full flex flex-col items-center justify-center"}>
-                            <p>{track.name}</p>
+                        <div key={track.id} className={selected_track == track.id ? "my-5 bg-amber-300 w-1/2 flex flex-col items-center justify-center" : "my-5 w-1/2 flex flex-col items-center justify-center"}>
+                            <div className='flex items-center justify-start w-full'>
+                                <p>{track.name}</p>
+                            </div>
+                            <div className='flex items-center justify-end w-full'>
+                                <p>By: {track.artists[0].name}</p>
+                            </div>
                             <img
-                            className="my-2"
-                            src={track.album.images[0].url}
-                            width={180}
-                            height={37}
-                            alt='album_img'
-                            onClick={() => setSelectedTrack(track.id)}
+                                className="my-2 w-full"
+                                src={track.album.images[0].url}
+                                width={180}
+                                height={37}
+                                alt='album_img'
+                                onClick={() => setSelectedTrack(track.id)}
                             />
                             {track.preview_url != null && <audio controls src={track.preview_url}></audio>}
                             <span>--------</span>

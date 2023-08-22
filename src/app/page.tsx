@@ -104,7 +104,7 @@ export default function Home(){
       radius: radius.toString(),
     }
     const tmpMarkers:Array<TrackMarker> = []
-    
+
     axios.post(`/api/location/search`, params).then((response) => {
       response.data.locations.forEach((location: Location) => {
         const tmpMarker: TrackMarker = {
@@ -220,9 +220,11 @@ export default function Home(){
         <div className="flex flex-col items-center justify-center w-full lg:w-1/2 m-3">
             {selected_marker != null && 
                 <div className='flex flex-col items-center justify-center'>
-                    <div className='w-4/5 flex items-center justify-between'>
-                        <p>{selected_marker.track_name}</p>
-                        <p>{selected_marker.artist_name}</p>
+                    <div className='w-4/5 flex items-center justify-start'>
+                        <p className='text-4xl'>{selected_marker.track_name}</p>
+                    </div>
+                    <div className='w-4/5 flex items-center justify-end'>
+                      <p>By: {selected_marker.artist_name}</p>
                     </div>
                     <img className='w-4/5' src={selected_marker.url} />
                     {selected_marker.preview_url != null && <audio className='w-full mt-3' controls src={selected_marker.preview_url}></audio>}
