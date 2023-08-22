@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import { useSearchParams } from 'next/navigation';
 import { Location, TrackMarker } from '@/libs/type/spotifyapi';
 
 const containerStyle = {
