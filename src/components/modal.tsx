@@ -21,7 +21,7 @@ const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: Mo
         });
     }
 
-    const postLocation = () => {
+    async function postLocation() {
         if (selected_track == '') {
             alert('投稿する曲を設定してください')
             return
@@ -37,7 +37,7 @@ const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: Mo
             lng: clicked_longitude.toString(),
             mid: selected_track,
         };
-        axios.post('/api/location/post', params)
+        await axios.post('/api/location/post', params)
         window.location.href = '/'
     }
 
