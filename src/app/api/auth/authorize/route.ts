@@ -7,7 +7,12 @@ export async function GET(req:any,res:any) {
   
   const { searchParams } = new URL(req.url!);
   const code = searchParams.get('code');
+  const state = searchParams.get('state');
   const cookie = cookies();
+
+  if(state != cookie.get('state')?.value) {
+    redirect('/')
+  }
 
   const params = new URLSearchParams();
   params.append('code', code as string);
