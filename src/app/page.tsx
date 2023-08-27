@@ -26,6 +26,7 @@ export default function Home(){
   const [map, setMap] = useState<google.maps.Map|null>(null);
 
   const [isLogged, setIsLogged] = useState<boolean>(false);
+  const [state, setState] = useState<string>('');
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
@@ -124,20 +125,26 @@ export default function Home(){
     })
   }
 
+  if(state == '') {
+    axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/token`).then((response) => {
+      setState(response.data.state)
+    })
+  }
+
+  if(!isLoaded || state == '') {
+    return (
+      <></>
+    )
+  }
+
   const params = new URLSearchParams();
   params.append('client_id', process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID || '');
   params.append('response_type', 'code');
   params.append('redirect_uri', process.env.NEXT_PUBLIC_RETURN_TO || '');
   params.append('scope', 'user-read-private user-read-email');
-  params.append('state', 'state');
+  params.append('state', state);
 
   const url = `https://accounts.spotify.com/authorize?${params.toString()}`
-
-  if(!isLoaded) {
-    return (
-      <></>
-    )
-  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-12 py-4">
@@ -160,8 +167,8 @@ export default function Home(){
                 </button>
                 : 
                 <a href={url}>
-                    <button type='button' className='bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded ml-3'>Sign in with Spotify</button>
-                </a> 
+                  <button type='button' className='bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded ml-3'>Sign in with Spotify</button>
+                </a>
             }
         </div>
       </div>
