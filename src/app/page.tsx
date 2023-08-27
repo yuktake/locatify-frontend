@@ -141,19 +141,26 @@ export default function Home(){
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-12 py-4">
-      <div className="flex items-start justify-between w-full mb-3">
-        <a className='font-serif text-4xl' href="/">Locatify</a>
-        <div className="z-10 max-w-5xl items-center justify-between font-mono text-sm flex">
+      <div className="flex items-center justify-between w-full mb-3">
+        <div>
+          <a className='font-serif text-4xl' href="/">Locatify</a>
+          <a className='m-4 font-serif text-xl' href="/about">About</a>
+        </div>
+        <div className="max-w-5xl items-center justify-between font-mono text-sm flex">
             { isLogged && 
             <a className='flex justify-end' href="/post">
-                <button type='button' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>POST</button>
+                <button type='button' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded'>
+                  <img src="/plus.svg" width={24} alt="" />
+                </button>
             </a> 
             }
             { isLogged ? 
-                <button type='button' onClick={logout} className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-3'>LOGOUT</button>
+                <button type='button' onClick={logout} className='bg-red-500 hover:bg-red-700 text-white py-2 px-2 font-bold rounded ml-3'>
+                  <img src="/logout.svg" width={24} alt="" />
+                </button>
                 : 
                 <a href={url}>
-                    <button type='button' className='bg-neutral-700 hover:bg-stone-900 text-green-500 font-bold py-2 px-4 rounded ml-3'>Sign in with Spotify</button>
+                    <button type='button' className='bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded ml-3'>Sign in with Spotify</button>
                 </a> 
             }
         </div>
