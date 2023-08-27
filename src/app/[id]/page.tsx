@@ -11,26 +11,11 @@ export default async function PostPage({ params: { id }, }: {params: { id: strin
 };
 
 async function getLocation(id:string) {
-    // const response = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/location/${id}`)
-    // if(response.data.status == 404) {
-    //     redirect('/')
-    // }
-    // const location = response.data.location
-
-    const location = {
-      id: 28,
-      uid: 'aaa',
-      mid: 'aaa',
-      track_name: 'aaa',
-      artist_name: 'aaa',
-      point: 'aaa',
-      x: 1,
-      y: 2,
-      thumbnail: 'aaa',
-      preview_url: 'aaa',
-      created_at: 'aaa',
-      updated_at: 'aaa'
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/location/${id}`)
+    if(response.data.status == 404) {
+        redirect('/')
     }
+    const location = response.data.location
 
     return location
 }
