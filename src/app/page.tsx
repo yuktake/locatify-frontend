@@ -52,6 +52,7 @@ export default function Home(){
 
   async function checkLoginApi(){
     const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
+    console.log(res)
 
     if(res.data.status == 200) {
       setIsLogged(true)
