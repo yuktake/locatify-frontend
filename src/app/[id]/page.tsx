@@ -21,8 +21,7 @@ async function getLocation(id:string) {
 }
 
 export async function generateMetadata(
-    { params: { id }, }: {params: { id: string };},
-    parent?: ResolvingMetadata
+    { params: { id }, }: {params: { id: string };}
 ): Promise<Metadata> {
     
     const location = await getLocation(id);
