@@ -79,8 +79,6 @@ export default function Post(){
     function clickMap(e:any){
         setClickedLatitude(e.latLng.lat())
         setClickedLongitude(e.latLng.lng())
-        setCenterLatitude(e.latLng.lat())
-        setCenterLongitude(e.latLng.lng())
     }
 
     function showModal() {
