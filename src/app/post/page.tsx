@@ -81,6 +81,9 @@ export default function Post(){
         setClickedLongitude(e.latLng.lng())
         setCenterLatitude(e.latLng.lat())
         setCenterLongitude(e.latLng.lng())
+    }
+
+    function showModal() {
         setIsOpen(true)
 
         if(isOpen) {
@@ -109,13 +112,21 @@ export default function Post(){
     return (
         <main className="min-h-screen px-12 py-4">
             <div className='flex flex-col items-center justify-center'>
-                <div className="flex items-start justify-start w-full">
+                <div className="flex items-center justify-start w-full">
                     <a className='font-serif text-4xl' href="/">Locatify</a>
                 </div>
                 <div className="flex w-full h-screen">
                     <div className="flex flex-col items-start justify-start w-full">
-                        <div className='flex items-center justify-end w-full'>
-                            <button onClick={() => toCurrent()}>
+                        <div className='flex items-center justify-between w-full my-2'>
+                            {clicked_latitude != 0 && clicked_longitude != 0 && 
+                                <button type='button' onClick={showModal} className='mx-2 bg-green-500 hover:bg-green-700 font-bold py-2 px-2 rounded'>
+                                    <img width={24} src="/music.svg"/>
+                                </button>
+                            }
+                            <div className="ml-2 flex items-center justify-center w-full">
+                                <span>Tap The Position Where You Want To Place The Song</span>
+                            </div>
+                            <button className='bg-green-500 rounded-full p-2' onClick={() => toCurrent()}>
                                 <img src="/near.svg" alt="" width={24} />
                             </button>
                         </div>
@@ -148,7 +159,13 @@ export default function Post(){
                 </div>
             </div>
             
-            <ModalComponent show={isOpen} clicked_latitude={clicked_latitude} clicked_longitude={clicked_longitude} close={close} ></ModalComponent>
+            <ModalComponent 
+                show={isOpen} 
+                clicked_latitude={clicked_latitude} 
+                clicked_longitude={clicked_longitude} 
+                close={close}
+            />
+
 
         </main>
     )
