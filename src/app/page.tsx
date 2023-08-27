@@ -51,7 +51,7 @@ export default function Home(){
   checkLoginApi()
 
   async function checkLoginApi(){
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
+    const res = await axios.get(`/api/auth/check`)
 
     if(res.data.status == 200) {
       setIsLogged(true)
@@ -126,7 +126,7 @@ export default function Home(){
   }
 
   if(state == '') {
-    axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/token`).then((response) => {
+    axios.get(`/api/auth/token`).then((response) => {
       setState(response.data.state)
     })
   }
