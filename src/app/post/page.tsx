@@ -58,7 +58,7 @@ export default function Post(){
     }, []);
 
     async function checkLoginApi(){
-        const res = await axios.get(`/api/auth/check`)
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
     
         if(res.data.status == 401) {
           window.location.href = '/'

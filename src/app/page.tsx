@@ -51,7 +51,7 @@ export default function Home(){
   checkLoginApi()
 
   async function checkLoginApi(){
-    const res = await axios.get(`/api/auth/check`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
 
     if(res.data.status == 200) {
       setIsLogged(true)
@@ -61,7 +61,7 @@ export default function Home(){
   }
 
   async function logout() {
-    const res = await axios.post(`/api/auth/logout`)
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/logout`)
     if(res.status = 200) {
       setIsLogged(false)
     }
@@ -126,7 +126,7 @@ export default function Home(){
   }
 
   if(state == '') {
-    axios.get(`/api/auth/token`).then((response) => {
+    axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/token`).then((response) => {
       setState(response.data.state)
     })
   }
