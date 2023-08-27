@@ -69,7 +69,8 @@ export async function GET(req:any, res:any) {
         });
     }catch(e:any){
         return NextResponse.json({ 
-            status: 500
+            status: 500,
+            message: e.message,
         });
     }
 }
