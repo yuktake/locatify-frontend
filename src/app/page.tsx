@@ -51,20 +51,20 @@ export default function Home(){
   checkLoginApi()
 
   async function checkLoginApi(){
-    // const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
 
-    // if(res.data.status == 200) {
-    //   setIsLogged(true)
-    // } else if(res.data.status == 401) {
-    //   setIsLogged(false)
-    // }
+    if(res.data.status == 200) {
+      setIsLogged(true)
+    } else if(res.data.status == 401) {
+      setIsLogged(false)
+    }
   }
 
   async function logout() {
-    // const res = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/logout`)
-    // if(res.status = 200) {
-    //   setIsLogged(false)
-    // }
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/logout`)
+    if(res.status = 200) {
+      setIsLogged(false)
+    }
   }
 
   // 取得に成功した場合の処理
