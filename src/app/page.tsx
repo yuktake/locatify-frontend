@@ -145,6 +145,7 @@ export default function Home(){
   params.append('redirect_uri', process.env.NEXT_PUBLIC_RETURN_TO || '');
   params.append('scope', 'user-read-private user-read-email');
   params.append('state', state);
+  params.append('show_dialog', 'true');
 
   const url = `https://accounts.spotify.com/authorize?${params.toString()}`
 
