@@ -69,6 +69,7 @@ export async function GET(req:any, res:any) {
 
         return NextResponse.json({ 
             status: 200,
+            userId: userId,
         });
     }catch(e:any){
         return NextResponse.json({ 
