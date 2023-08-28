@@ -2,6 +2,7 @@ import axios from 'axios';
 import { PostComponent } from '@/components/post';
 import type { Metadata, ResolvingMetadata } from 'next'
 import { redirect } from 'next/navigation';
+import { NextResponse } from 'next/server';
 
 export default async function PostPage({ params: { id }, }: {params: { id: string };}){
 
@@ -13,7 +14,7 @@ export default async function PostPage({ params: { id }, }: {params: { id: strin
 async function getLocation(id:string) {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/location/${id}`)
     if(response.data.status == 404) {
-        redirect('/')
+        redirect('/404')
     }
     const location = response.data.location
 
