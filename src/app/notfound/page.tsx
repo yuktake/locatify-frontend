@@ -1,6 +1,4 @@
-"use client"
-
-export default function About(){
+export default function Custom404(){
 
     return <>
         <main className="px-12 py-4 h-screen">
