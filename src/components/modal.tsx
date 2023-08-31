@@ -67,7 +67,7 @@ const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: Mo
                             </div>
                             <img
                                 className="my-2 w-full"
-                                src={track.album.images[0].url}
+                                src={track.album.images.length != 0 ? track.album.images[0].url : '/music.svg'}
                                 width={180}
                                 height={37}
                                 alt='album_img'

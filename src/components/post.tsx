@@ -36,7 +36,7 @@ export const PostComponent = ({ location }: PostProps) => {
         <>
             <Script src='https://platform.twitter.com/widgets.js'/>
             <main className="flex min-h-screen flex-col items-center justify-center px-12 py-4">
-                <div className="flex flex-col items-center justify-center h-screen">
+                <div className="flex flex-col items-center justify-center">
                     <div className="flex items-center justify-between w-full">
                         <a className='font-serif text-4xl' href="/">Locatify</a>
                         <a className="twitter-share-button" href="https://twitter.com/intent/tweet"></a>
