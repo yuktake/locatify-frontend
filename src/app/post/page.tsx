@@ -93,6 +93,7 @@ export default function Post(){
         if(map == null) {
             return
         }
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
         map.panTo({lat:current_latitude, lng:current_longitude})
     }
 

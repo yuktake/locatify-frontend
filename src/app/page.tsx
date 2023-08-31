@@ -27,6 +27,7 @@ export default function Home(){
 
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [state, setState] = useState<string>('');
+  const [userId, setUserId] = useState<string>('');
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
@@ -55,6 +56,7 @@ export default function Home(){
 
     if(res.data.status == 200) {
       setIsLogged(true)
+      setUserId(res.data.userId)
     } else if(res.data.status == 401) {
       setIsLogged(false)
     }
@@ -89,6 +91,7 @@ export default function Home(){
     if(map == null) {
         return
     }
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
     map.panTo({lat:current_latitude, lng:current_longitude})
   }
 
@@ -143,23 +146,32 @@ export default function Home(){
   params.append('redirect_uri', process.env.NEXT_PUBLIC_RETURN_TO || '');
   params.append('scope', 'user-read-private user-read-email');
   params.append('state', state);
+  params.append('show_dialog', 'true');
 
   const url = `https://accounts.spotify.com/authorize?${params.toString()}`
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-12 py-4">
       <div className="flex items-center justify-between w-full mb-3">
-        <div>
+        <div className='flex items-center justify-start'>
           <a className='font-serif text-4xl' href="/">Locatify</a>
-          <a className='m-4 font-serif text-xl' href="/about">About</a>
+          <a className='m-4 font-serif text-xl' href="/about">
+            <img src="/help.svg" width={24} alt="" />
+          </a>
         </div>
         <div className="max-w-5xl items-center justify-between font-mono text-sm flex">
-            { isLogged && 
-            <a className='flex justify-end' href="/post">
-                <button type='button' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded'>
-                  <img src="/plus.svg" width={24} alt="" />
-                </button>
-            </a> 
+            { isLogged && <>
+                <a href={`/${userId}`}>
+                    <button type='button' className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded'>
+                      <img src="/person.svg" width={24} alt="" />
+                    </button>
+                </a> 
+                <a className='ml-3' href="/post">
+                    <button type='button' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded'>
+                      <img src="/plus.svg" width={24} alt="" />
+                    </button>
+                </a> 
+              </>
             }
             { isLogged ? 
                 <button type='button' onClick={logout} className='bg-red-500 hover:bg-red-700 text-white py-2 px-2 font-bold rounded ml-3'>
@@ -194,7 +206,7 @@ export default function Home(){
               </select>
             </div>
 
-            <button onClick={() => toCurrent()}>
+            <button className='bg-green-500 rounded-full p-2' onClick={() => toCurrent()}>
                 <img src="/near.svg" alt="" width={24} />
             </button>
 
