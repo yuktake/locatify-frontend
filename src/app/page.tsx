@@ -91,6 +91,7 @@ export default function Home(){
     if(map == null) {
         return
     }
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
     map.panTo({lat:current_latitude, lng:current_longitude})
   }
 
@@ -205,7 +206,7 @@ export default function Home(){
               </select>
             </div>
 
-            <button onClick={() => toCurrent()}>
+            <button className='bg-green-500 rounded-full p-2' onClick={() => toCurrent()}>
                 <img src="/near.svg" alt="" width={24} />
             </button>
 
