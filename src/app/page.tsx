@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { Location, TrackMarker } from '@/libs/type/spotifyapi';
@@ -16,11 +16,8 @@ export default function Home(){
   const [markers, setMarkers] = useState<TrackMarker[]>([]);
   const [selected_marker, setSelectedMarker] = useState<TrackMarker|null>(null);
 
-  const [current_latitude, setCurrentLatitude] = useState<number>(0);
-  const [current_longitude, setCurrentLongitude] = useState<number>(0);
-
-  const [center_latitude, setCenterLatitude] = useState<number>(0);
-  const [center_longitude, setCenterLongitude] = useState<number>(0);
+  const [current_center, setCurrentCenter] = useState<any>({lat: 0, lng:0});
+  const [center, setCenter] = useState<any>({lat: 0, lng:0});
 
   const [radius, setRadius] = useState<string>('1');
   const [map, setMap] = useState<google.maps.Map|null>(null);
@@ -33,23 +30,12 @@ export default function Home(){
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
   })
 
-  const center = {
-    lat: center_latitude,
-    lng: center_longitude,
-  };
-
-  const current = {
-    lat: current_latitude,
-    lng: current_longitude,
-  };
-
-  useEffect(() => {
-    if('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
-    }
-  }, []);
-
   checkLoginApi()
+
+  function init(map: google.maps.Map) {
+    setMap(map)
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
+  }
 
   async function checkLoginApi(){
     const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
@@ -75,15 +61,27 @@ export default function Home(){
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
-    setCurrentLatitude(latitude)
-    setCurrentLongitude(longitude)
-    setCenterLatitude(latitude)
-    setCenterLongitude(longitude)
+    setCurrentCenter({lat: latitude, lng: longitude})
+    setCenter({lat: latitude, lng: longitude})
+    map?.setCenter({
+      lat: latitude,
+      lng: longitude
+    })
   };
 
+  function onDragEnd() {
+    if(map == null) {
+      return
+    }
+
+    var lat = map.getCenter()!.lat()
+    var lng = map.getCenter()!.lng()
+
+    map.setCenter({lat:lat, lng:lng})
+  }
+
   function selectMarker(marker:TrackMarker) {
-    setCenterLatitude(marker.point.lat)
-    setCenterLongitude(marker.point.lng)
+    setCenter({lat: marker.point.lat, lng: marker.point.lng})
     setSelectedMarker(marker)
   }
 
@@ -92,7 +90,7 @@ export default function Home(){
         return
     }
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
-    map.panTo({lat:current_latitude, lng:current_longitude})
+    map.panTo({lat:current_center.lat, lng:current_center.lng})
   }
 
   // 取得に失敗した場合の処理
@@ -189,7 +187,7 @@ export default function Home(){
         <div className="flex flex-col items-center justify-center lg:w-1/2 h-half-screen">
           <div className='flex items-center justify-between w-full'>
             <div className='flex items-center my-3'>
-              <button onClick={() => {searchLocation(current_latitude,current_longitude)}}>
+              <button onClick={() => {searchLocation(current_center.lat, current_center.lng)}}>
                 <img src="/search.svg" alt="" width={24} />
               </button>
               <span className='ml-3'>Area</span>
@@ -215,11 +213,12 @@ export default function Home(){
           <GoogleMap 
             mapContainerStyle={containerStyle} 
             center={center} 
-            onLoad={map=>setMap(map)}
+            onLoad={map=>init(map)}
             zoom={zoom}
+            onDragEnd={onDragEnd}
           >
-            {center_latitude != 0 && <Marker 
-                position={current} 
+            {center.lat != 0 && <Marker 
+                position={current_center} 
                 label=''
                 icon={{
                   url: '/me.svg',

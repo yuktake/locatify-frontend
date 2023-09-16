@@ -3,12 +3,11 @@ import axios from 'axios';
 
 type ModalProps = {
   show: boolean,
-  clicked_latitude: number,
-  clicked_longitude: number,
+  clicked: any,
   close: Function,
 }
 
-const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: ModalProps) => {
+const ModalComponent = ({ show, clicked, close }: ModalProps) => {
 
     const [query, setQuery] = useState<string>('');
     const [tracks, setTracks] = useState([]);
@@ -27,14 +26,14 @@ const ModalComponent = ({ show, clicked_latitude, clicked_longitude, close }: Mo
             return
         }
 
-        if (clicked_latitude == 0 || clicked_longitude == 0) {
+        if (clicked.lat == 0 || clicked.lng == 0) {
             alert('投稿する場所をマップにセットしてください')
             return
         }
         
         const params = {
-            lat: clicked_latitude.toString(),
-            lng: clicked_longitude.toString(),
+            lat: clicked.lat.toString(),
+            lng: clicked.lng.toString(),
             mid: selected_track,
         };
         await axios.post('/api/location/post', params)
