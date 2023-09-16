@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import ModalComponent from '@/components/modal';
@@ -13,15 +13,9 @@ const containerStyle = {
 const zoom = 13;
 
 export default function Post(){
-
-    const [current_latitude, setCurrentLatitude] = useState<number>(0);
-    const [current_longitude, setCurrentLongitude] = useState<number>(0);
-
-    const [center_latitude, setCenterLatitude] = useState<number>(0);
-    const [center_longitude, setCenterLongitude] = useState<number>(0);
-
-    const [clicked_latitude, setClickedLatitude] = useState<number>(0);
-    const [clicked_longitude, setClickedLongitude] = useState<number>(0);
+    const [current_center, setCurrentCenter] = useState<any>({lat: 0, lng:0});
+    const [clicked, setClicked] = useState<any>({lat: 0, lng:0});
+    const [center, setCenter] = useState<any>({lat: 0, lng:0});
 
     const [map, setMap] = useState<any>(null);
 
@@ -35,27 +29,12 @@ export default function Post(){
         setIsOpen(false)
     }
 
-    const center = {
-        lat: center_latitude,
-        lng: center_longitude,
-    };
-
-    const current = {
-        lat: current_latitude,
-        lng: current_longitude,
-    };
-
-    const clicked = {
-        lat: clicked_latitude,
-        lng: clicked_longitude,
+    function init(map: google.maps.Map) {
+        setMap(map)
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
     }
 
-    useEffect(() => {
-        if('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-        }
-        checkLoginApi()
-    }, []);
+    checkLoginApi()
 
     async function checkLoginApi(){
         const res = await axios.get(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/auth/check`)
@@ -70,17 +49,17 @@ export default function Post(){
         // 緯度・経度を取得し画面に表示
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        setCurrentLatitude(latitude)
-        setCurrentLongitude(longitude)
-        setCenterLatitude(latitude)
-        setCenterLongitude(longitude)
+
+        setCurrentCenter({lat: latitude, lng: longitude})
+        setCenter({lat: latitude, lng: longitude})
+        map?.setCenter({
+            lat: latitude,
+            lng: longitude
+        })
     };
 
     function clickMap(e:any){
-        setClickedLatitude(e.latLng.lat())
-        setClickedLongitude(e.latLng.lng())
-        setCenterLatitude(e.latLng.lat())
-        setCenterLongitude(e.latLng.lng())
+        setClicked({lat: e.latLng.lat(), lng:e.latLng.lng()})
     }
 
     function showModal() {
@@ -96,7 +75,10 @@ export default function Post(){
             return
         }
         navigator.geolocation.getCurrentPosition(successCallback, errorCallback)
-        map.panTo({lat:current_latitude, lng:current_longitude})
+        map.panTo({
+            lat:current_center.lat, 
+            lng:current_center.lng
+        })
     }
 
     // 取得に失敗した場合の処理
@@ -119,7 +101,7 @@ export default function Post(){
                 <div className="flex w-full h-screen">
                     <div className="flex flex-col items-start justify-start w-full">
                         <div className='flex items-center justify-between w-full my-2'>
-                            {clicked_latitude != 0 && clicked_longitude != 0 && 
+                            {clicked.lat != 0 && clicked.lng != 0 && 
                                 <button type='button' onClick={showModal} className='mx-2 bg-green-500 hover:bg-green-700 font-bold py-2 px-2 rounded'>
                                     <img width={24} src="/music.svg"/>
                                 </button>
@@ -136,7 +118,7 @@ export default function Post(){
                             mapContainerStyle={containerStyle} 
                             center={center} 
                             zoom={zoom} 
-                            onLoad={map=>setMap(map)}
+                            onLoad={map=>init(map)}
                             onClick={clickMap}
                         >
                             {clicked.lat != 0 && <Marker 
@@ -148,7 +130,7 @@ export default function Post(){
                                 }}
                             />}
                             <Marker 
-                                position={current} 
+                                position={current_center} 
                                 label=''
                                 icon={{
                                     url: '/me.svg',
@@ -162,12 +144,9 @@ export default function Post(){
             
             <ModalComponent 
                 show={isOpen} 
-                clicked_latitude={clicked_latitude} 
-                clicked_longitude={clicked_longitude} 
+                clicked={clicked} 
                 close={close}
             />
-
-
         </main>
     )
 }
